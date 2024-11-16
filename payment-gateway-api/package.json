@@ -1,0 +1,20 @@
+{
+  "name": "payment-gateway-api",
+  "version": "1.0.0",
+  "description": "Payment Gateway Api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "Kacper Zaba",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
