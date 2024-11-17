@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Payment Gateway Api",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
@@ -10,7 +11,12 @@
   "author": "Kacper Zaba",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.4",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
   },

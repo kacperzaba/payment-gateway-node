@@ -1,4 +1,4 @@
-const ApiError = require('../error/ApiError');
+import ApiError from '../error/ApiError.js';
 
 class TweetController {
   tweet(req, res, next) {
@@ -11,4 +11,4 @@ class TweetController {
   }
 }
 
-module.exports = new TweetController();
+export default new TweetController();

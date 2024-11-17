@@ -1,5 +1,5 @@
-const ApiError = require("./ApiError");
-const logger = require('../logger');
+import ApiError from "./ApiError.js";
+import logger from '../logger/winstonLogger.js';
 
 function apiErrorHandler(err, req, res, next) {
     logger.error(err);
@@ -12,4 +12,4 @@ function apiErrorHandler(err, req, res, next) {
     res.status(500).json('something went wrong');
 }
 
-module.exports = apiErrorHandler;
+export default apiErrorHandler;

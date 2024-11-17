@@ -1,11 +1,17 @@
-const express = require('express');
-const router = require('./routes');
-const apiErrorHandler = require('./error/api-error-handler');
+import express, { json } from 'express';
+import router from './routes/tweet.js';
+import apiErrorHandler from './error/api-error-handler.js';
+import authRoute from './routes/auth.js';
+import mysqlConnection from './db/database.js';
 
 const app = express();
-app.use(express.json());
+
+app.use(json());
 app.use('/', router);
+app.use('/api/user', authRoute);
 
 app.use(apiErrorHandler);
 
-module.exports = app;
+mysqlConnection();
+
+export default app;
