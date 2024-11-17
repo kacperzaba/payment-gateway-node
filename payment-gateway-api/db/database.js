@@ -1,20 +1,21 @@
 import { createPool } from 'mysql2';
-import configs from 'dotenv';
+import dotenv from 'dotenv';
 import ApiError from '../error/ApiError.js';
 
+dotenv.config();
+
 const pool = createPool({
-    host: 'localhost', // zmienna srodowiskowa
-    user: 'root',
-    password: 'root',
-    database: 'payment-gateway-db'
+    host: process.env.DB_HOST, 
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 }).promise();
 
 const mysqlConnection = async () => {
     try {
         await pool.getConnection();
-        console.log('Database connected successfully'); // usunac
     } catch (err) {
-        throw new Error();
+        throw ApiError.customError(500, err.message);
     }
 }
 

@@ -12,6 +12,6 @@ app.use('/api/user', authRoute);
 
 app.use(apiErrorHandler);
 
-mysqlConnection();
+await mysqlConnection();
 
 export default app;

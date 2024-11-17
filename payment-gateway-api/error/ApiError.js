@@ -12,6 +12,10 @@ class ApiError {
         return new ApiError(code, msg);
     }
 
+    static dbConnectionError() {
+        return new ApiError(500, 'Database connection failed');
+    }
+
     static internal(msg) {
         return new ApiError(500, msg);
     }
