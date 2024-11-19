@@ -16,6 +16,10 @@ class ApiError {
         return new ApiError(500, 'Database connection failed');
     }
 
+    static unauthorized() {
+        return new ApiError(401, 'Authorization failed');
+    }
+
     static internal(msg) {
         return new ApiError(500, msg);
     }
