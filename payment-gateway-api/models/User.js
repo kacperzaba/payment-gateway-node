@@ -18,6 +18,14 @@ const User = sequelize.define('User', {
             len: [6, 255],
         },
     },
+    role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+       defaultValue: 'User' 
+    }
+},
+{
+    timestamps: true
 });
 
 export default User;
