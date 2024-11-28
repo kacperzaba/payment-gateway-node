@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import ApiError from '../error/ApiError.js';
 
-export const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
     const authHeader = req.header('Authorization');
 
     if (!authHeader) {
@@ -21,3 +21,8 @@ export const verifyToken = (req, res, next) => {
         next(ApiError.unauthorized());
     }
 };
+
+
+
+
+export default verifyToken;

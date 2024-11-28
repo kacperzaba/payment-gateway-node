@@ -1,13 +1,18 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
+import Role from './Role.js';
 
 const User = sequelize.define('User', {
+    user_id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+    },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: {
-            len: [6, 255],
+            len: [8, 255],
             isEmail: true,
         },
     },
@@ -15,17 +20,13 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            len: [6, 255],
+            len: [8, 255],
         },
     },
-    role: {
-        type: DataTypes.STRING,
-        allowNull: false,
-       defaultValue: 'user' 
-    }
 },
 {
     timestamps: true
 });
+
 
 export default User;

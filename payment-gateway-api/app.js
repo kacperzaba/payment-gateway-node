@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import apiErrorHandler from './error/api-error-handler.js';
 import authRouter from './routes/auth.js';
 import initializeDatabase from './config/initializeDatabase.js';
+import { seedRoles } from './seeders/seedRoles.js';
 
 dotenv.config();
 
@@ -18,5 +19,6 @@ app.use('/api/auth', authRouter);
 app.use(apiErrorHandler);
 
 await initializeDatabase();
+seedRoles();
 
 export default app;
