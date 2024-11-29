@@ -1,10 +1,20 @@
 import ApiError from '../error/ApiError.js';
+import User from '../models/User.js';
 
 export const hasRole = (...allowedRoles) => {
-    return (req, res, next) => {
-        if (!req.user || !allowedRoles.includes(req.user.role)) {
-            return next(ApiError.customError(401, 'Access denied. Insufficient permissions.'));
+    return async (req, res, next) => {
+        const user = await User.findByPk(req.user.id, { include: 'Roles' });
+
+        if (!user) {
+            return next(ApiError.unauthorized('User not found.'));
         }
-        next(); 
+
+        const userHasRole = user.Roles.some(role => allowedRoles.includes(role.name));
+
+        if (!userHasRole) {
+            return next(ApiError.forbidden(`Require one of the following roles: ${allowedRoles.join(', ')}`));
+        }
+
+        next();
     };
 };

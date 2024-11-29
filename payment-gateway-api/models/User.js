@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
-import Role from './Role.js';
 
 const User = sequelize.define('User', {
     user_id: {
@@ -27,6 +26,5 @@ const User = sequelize.define('User', {
 {
     timestamps: true
 });
-
 
 export default User;

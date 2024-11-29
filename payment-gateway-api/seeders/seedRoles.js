@@ -8,7 +8,6 @@ export const seedRoles = async () => {
         ];
 
         await Role.bulkCreate(roles, { ignoreDuplicates: true }); 
-        console.log('Roles seeded successfully!');
     } catch (err) {
         console.error('Error seeding roles:', err);
     }

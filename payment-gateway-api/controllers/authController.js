@@ -50,6 +50,6 @@ export const login = async (req,res, next) => {
         return next(ApiError.unauthorized());
     }
 
-    const accessToken = jwt.sign({id: user.id}, process.env.JWT_SECRET); 
+    const accessToken = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET); 
     res.json({ accessToken: accessToken });
 }
