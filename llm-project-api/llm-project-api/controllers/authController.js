@@ -1,6 +1,7 @@
 import ApiError from '../error/ApiError.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { createUser, findUserByEmail } from '../services/authService.js';
 import User from '../models/User.js';
 import Role from '../models/Role.js';
 import { apiResponse } from '../response/apiResponse.js';
@@ -8,7 +9,7 @@ import { apiResponse } from '../response/apiResponse.js';
 export const register = async (req, res, next) => {
     const { email, password, role } = req.body;
 
-    const isExist = await User.findOne( {where: {email} });
+    const isExist = await findUserByEmail(email);
     if (isExist) {
         return next(ApiError.badRequest('Email is already in use'));
     };
@@ -40,7 +41,7 @@ export const register = async (req, res, next) => {
 export const login = async (req,res, next) => {
     const { email, password } = req.body;
     
-    const user = await User.findOne( {where: {email} });
+    const user = await findUserByEmail(email);
     if (!user) {
         return next(ApiError.unauthorized());
     }
