@@ -1,6 +1,14 @@
-const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
+import express from 'express';
+import Stripe from 'stripe';
+import dotenv from 'dotenv';
 
-app.post("/create-checkout-session", async (req, res)=>{
+dotenv.config();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+const checkoutRouter = express.Router();
+
+checkoutRouter.post("/create-checkout-session", async (req, res, next) => {
     try{
         const session = await stripe.checkout.sessions.create({
             payment_method_types:["card"],
@@ -8,7 +16,7 @@ app.post("/create-checkout-session", async (req, res)=>{
             line_items: req.body.items.map(item => {
                 return{
                     price_data:{
-                        currency:"inr",
+                        currency:"usd",
                         product_data:{
                             name: item.name
                         },
@@ -18,8 +26,8 @@ app.post("/create-checkout-session", async (req, res)=>{
                     quantity: item.quantity
                 }
             }),
-            success_url: 'http://127.0.0.1:5173/success',
-            cancel_url: 'http://127.0.0.1:5173/cancel'
+            success_url: 'http://localhost:5173/success',
+            cancel_url: 'http://localhost:5173/cancel'
         })
 
         res.json({url: session.url})
@@ -28,3 +36,5 @@ app.post("/create-checkout-session", async (req, res)=>{
      res.status(500).json({error:e.message})
     }
 })
+
+export default checkoutRouter;
