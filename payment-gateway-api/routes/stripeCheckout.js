@@ -8,33 +8,35 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 const checkoutRouter = express.Router();
 
+checkoutRouter.get("/config", async (req, res) => {
+    const price = await stripe.prices.retrieve(process.env.PRICE);
+    console.log(price);
+    res.send({
+        publicKey: process.env.STRIPE_PUBLISHABLE_KEY,
+        unitAmount: price.unit_amount,
+        currency: price.currency,
+    })
+})
+
 checkoutRouter.post("/create-checkout-session", async (req, res, next) => {
-    try{
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types:["card"],
-            mode:"payment",
-            line_items: req.body.items.map(item => {
-                return{
-                    price_data:{
-                        currency:"usd",
-                        product_data:{
-                            name: item.name
-                        },
-                        unit_amount: (item.price)*100,
+    const domainURL = process.env.DOMAIN;
 
-                    },
-                    quantity: item.quantity
-                }
-            }),
-            success_url: 'http://localhost:5173/success',
-            cancel_url: 'http://localhost:5173/cancel'
-        })
+    const { quantity } = req.body;
 
-        res.json({url: session.url})
+    const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [
+            {
+                price: process.env.PRICE,
+                quantity: quantity
+            },
+        ],
 
-    }catch(e){
-     res.status(500).json({error:e.message})
-    }
+        success_url: `${domainURL}/success`,
+        cancel_url: `${domainURL}/cancel`
+    });
+
+    return res.redirect(303, session.url);
 })
 
 export default checkoutRouter;

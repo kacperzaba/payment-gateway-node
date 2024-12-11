@@ -15,16 +15,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// app.use(
+//     cors({
+//         origin: "http://localhost:5173", // Allow requests from your frontend
+//         methods: ["GET", "POST"],       // Specify allowed methods
+//         credentials: true               // Allow credentials if needed (e.g., cookies)
+//     })
+// );
+
 app.use(
     cors({
-        origin: "http://localhost:5173", // Allow requests from your frontend
-        methods: ["GET", "POST"],       // Specify allowed methods
-        credentials: true               // Allow credentials if needed (e.g., cookies)
+        origin: true, // Allow all origins
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Specify methods (or use "*")
+        credentials: true // Allow credentials if needed
     })
 );
 
+
 app.use('/api/auth', authRouter);
-app.use('/api/payment', checkoutRouter);
+app.use('/api', checkoutRouter);
 
 app.use(apiErrorHandler);
 
