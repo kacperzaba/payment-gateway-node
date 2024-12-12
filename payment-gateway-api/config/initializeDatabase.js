@@ -5,7 +5,7 @@ import User from '../models/User.js';
 const initializeDatabase = async () => {
     try {
         await sequelize.authenticate();
-        await sequelize.sync({ force: false }); 
+        await sequelize.sync({ force: true }); 
     } catch (err) {
         throw ApiError.dbConnectionError();
     }
@@ -13,6 +13,5 @@ const initializeDatabase = async () => {
 
 Role.belongsToMany(User, { through: 'user_roles' });
 User.belongsToMany(Role, { through: 'user_roles' });
-
 
 export default initializeDatabase;

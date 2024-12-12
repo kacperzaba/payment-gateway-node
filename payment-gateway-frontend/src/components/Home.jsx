@@ -31,12 +31,18 @@ const Home = () => {
       const {
         unitAmount,
         currency
-      } = await fetch('http://localhost:3000/api/config').then(r => r.json());
+      } = await fetch('https://d089-91-150-177-233.ngrok-free.app/api/config', {
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true"
+        }
+      }).then(r => r.json());
       setAmount(unitAmount);
       setCurrency(currency);
-    }
+    };
     fetchConfig();
   }, []);
+  
 
   return (
     <div className='w-full mx-auto'>
@@ -61,7 +67,7 @@ const Home = () => {
           </div>
           <small className='mt-10 mb-3 font-semibold'>Add Quantity</small>
 
-          <form action="http://localhost:3000/api/create-checkout-session" method="POST">
+          <form action="https://d089-91-150-177-233.ngrok-free.app/api/create-checkout-session" method="POST">
             <div className="quantity-setter">
               <button
                 className="increment-btn"
