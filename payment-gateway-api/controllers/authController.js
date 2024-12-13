@@ -1,14 +1,14 @@
 import ApiError from '../error/ApiError.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { createUser, findUserByEmail } from '../services/authService.js';
 import User from '../models/User.js';
 import Role from '../models/Role.js';
+import { apiResponse } from '../response/apiResponse.js';
 
 export const register = async (req, res, next) => {
     const { email, password, role } = req.body;
 
-    const isExist = await findUserByEmail(email);
+    const isExist = await User.findOne( {where: {email} });
     if (isExist) {
         return next(ApiError.badRequest('Email is already in use'));
     };
@@ -31,16 +31,16 @@ export const register = async (req, res, next) => {
             return next(ApiError.badRequest('Invalid role'));
         }
 
-        await newUser.addRoles(roles)
+        await newUser.addRoles(roles);
     };
 
-    res.status(201).json({ message: 'User created', user: newUser });
+    return apiResponse.response(res, 201, newUser);
 }
 
 export const login = async (req,res, next) => {
     const { email, password } = req.body;
     
-    const user = await findUserByEmail(email);
+    const user = await User.findOne( {where: {email} });
     if (!user) {
         return next(ApiError.unauthorized());
     }
@@ -50,6 +50,6 @@ export const login = async (req,res, next) => {
         return next(ApiError.unauthorized());
     }
 
-    const accessToken = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET); 
-    res.json({ accessToken: accessToken });
+    const accessToken = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET); 
+    return apiResponse.response(res, 200, accessToken);
 }

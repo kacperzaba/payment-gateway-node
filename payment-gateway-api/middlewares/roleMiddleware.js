@@ -6,13 +6,13 @@ export const hasRole = (...allowedRoles) => {
         const user = await User.findByPk(req.user.id, { include: 'Roles' });
 
         if (!user) {
-            return next(ApiError.unauthorized('User not found.'));
+            return next(ApiError.unauthorized());
         }
 
         const userHasRole = user.Roles.some(role => allowedRoles.includes(role.name));
 
         if (!userHasRole) {
-            return next(ApiError.forbidden(`Require one of the following roles: ${allowedRoles.join(', ')}`));
+            return next(ApiError.badRequest(`Require one of the following roles: ${allowedRoles.join(', ')}`));
         }
 
         next();

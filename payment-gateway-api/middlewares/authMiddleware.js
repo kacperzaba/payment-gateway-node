@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import ApiError from '../error/ApiError.js';
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
     const authHeader = req.header('Authorization');
 
     if (!authHeader) {
@@ -14,9 +14,9 @@ const verifyToken = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET); 
+        const verifyAsync = promisify(jwt.verify);
+        const decoded = await verifyAsync(token, process.env.JWT_SECRET);
         req.user = decoded; 
-        console.log(decoded);
         next();
     } catch (err) {
         next(ApiError.unauthorized());

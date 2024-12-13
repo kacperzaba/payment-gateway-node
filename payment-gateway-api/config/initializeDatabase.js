@@ -14,5 +14,4 @@ const initializeDatabase = async () => {
 Role.belongsToMany(User, { through: 'user_roles' });
 User.belongsToMany(Role, { through: 'user_roles' });
 
-
 export default initializeDatabase;
