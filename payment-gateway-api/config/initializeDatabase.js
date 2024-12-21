@@ -5,7 +5,7 @@ import User from '../models/User.js';
 const initializeDatabase = async () => {
     try {
         await sequelize.authenticate();
-        await sequelize.sync({ force: true }); 
+        await sequelize.sync({ force: false }); 
     } catch (err) {
         throw ApiError.dbConnectionError();
     }

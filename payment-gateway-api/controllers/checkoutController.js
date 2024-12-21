@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import Stripe from 'stripe';
 import ApiError from '../error/ApiError.js';
 import Transaction from '../models/Transaction.js';
+import Result from '../result/Result.js';
 
 dotenv.config();
 
@@ -9,11 +10,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const getConfig = async (req, res, next) => {
     const price = await stripe.prices.retrieve(process.env.PRICE);
-    return res.status(200).json({
+    const responseData = {
         publicKey: process.env.STRIPE_PUBLISHABLE_KEY,
         unitAmount: price.unit_amount,
         currency: price.currency,
-    });
+    };
+
+    return Result.ApiResult(res, 200, responseData);
 }
 
 export const createCheckoutSession = async (req, res, next) => {
@@ -41,7 +44,7 @@ export const createCheckoutSession = async (req, res, next) => {
       createdDate: new Date(),
     });
 
-    return res.redirect(303, session.url);
+    return Result.ApiResult(res, 303, { url: session.url });
 }
 
 export const webhook = async (req, res, next) => {
@@ -70,13 +73,7 @@ export const webhook = async (req, res, next) => {
       data = req.body.data;
       eventType = req.body.type;
     }
-
-
-
-    if (eventType === 'checkout.session.completed') {
-      console.log(`🔔  Payment received!`);
-    }
-
+    
     Transaction.update({
       transactionStatus: eventType,
       amount: session.amount_total,
@@ -86,5 +83,5 @@ export const webhook = async (req, res, next) => {
       where: { paymentSystemTransactionId: session.id },
     })
   
-    res.sendStatus(200);
+    return Result.ApiResult(res, 200, null);
 }

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Role from '../models/Role.js';
-import { apiResponse } from '../response/apiResponse.js';
+import Result from '../result/Result.js';
 
 export const register = async (req, res, next) => {
     const { email, password, role } = req.body;
@@ -34,7 +34,7 @@ export const register = async (req, res, next) => {
         await newUser.addRoles(roles);
     };
 
-    return apiResponse.response(res, 201, newUser);
+    return Result.ApiResult(res, 201, newUser);
 }
 
 export const login = async (req,res, next) => {
@@ -51,5 +51,5 @@ export const login = async (req,res, next) => {
     }
 
     const accessToken = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET); 
-    return apiResponse.response(res, 200, accessToken);
+    return Result.ApiResult(res, 200, { token: accessToken });
 }
